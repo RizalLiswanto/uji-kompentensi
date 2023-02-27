@@ -79,7 +79,8 @@
           @if ($item->status === 'deleted')
            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTop{{ $item->id }}">
           komen
-          </button> @endif</td>
+          </button> @endif
+      </td>
         <td>
           <button type="button" class="btn btn-primary" id="btn-modal-{{ $item->id }}">Detail Berita</button>
        </td>
@@ -130,6 +131,7 @@
 <div class="modal modal-top fade" id="modalTop{{ $item->id }}" tabindex="-1">
   <div class="modal-dialog">
     <form class="modal-content" action="{{ url('/komen',$item->id ) }}" method="POST">
+      @csrf
       <div class="modal-header">
         <h5 class="modal-title" id="modalTopTitle">Alasan Berita di hapus</h5>
         <button
@@ -145,9 +147,9 @@
             <label for="nameSlideTop" class="form-label">ISi komentar</label>
             <textarea
               type="text"
-              id="nameSlideTop"
+              name="komen"
               class="form-control"
-              placeholder="Enter Name">
+             >{{ $item->komentar }}
             </textarea>
           </div>
         </div>
@@ -158,7 +160,7 @@
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
           Keluar
         </button>
-        <button type="button" class="btn btn-primary">Simpan</button>
+        <button type="submit" class="btn btn-primary">Simpan</button>
       </div>
     </form>
   </div>

@@ -90,8 +90,8 @@
             </div>
             <!-- Tampilan komentar -->
             <div class="card mb-3">
-              {{-- <div class="card-body"> --}}
-                {{-- <h3 class="card-title">Komentar</h3>
+              <div class="card-body"> 
+                 <h3 class="card-title">Komentar</h3>
                 <!-- Form komentar -->
                 <form action="" method="POST">
                   @csrf
@@ -104,17 +104,17 @@
                     <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
                   </div>
                   <button type="submit" class="btn btn-primary">Kirim</button>
-                </form> --}}
+                </form> 
                 <!-- Tampilan daftar komentar -->
               
-                {{-- <div class="card mt-3">
+                 <div class="card mt-3">
                   <div class="card-body">
                     <h5 class="card-title"></h5>
                     <p class="card-text"></p>
                   </div>
-                </div> --}}
+                </div>
              
-              {{-- </div> --}}
+              </div>
             </div>
           </div>
           <div class="col-md-4">

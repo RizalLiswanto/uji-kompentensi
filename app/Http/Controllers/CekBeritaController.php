@@ -168,11 +168,16 @@ public function update(Request $request, $id)
 
 
 
+
     
-
-
-
-
+public function komen(Request $request, $id)
+{
+    $item = Berita::find($id);
+    $item->komentar= $request->komen;
+    $item->save();
+    
+    return redirect('/cek-berita')->with('success', 'Komentar berhasil di isi');
+}
 
 
     
