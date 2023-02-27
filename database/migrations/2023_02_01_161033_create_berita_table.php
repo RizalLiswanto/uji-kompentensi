@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('user_id');
             $table->bigInteger('tipe_berita_id');
             $table->string('judul');
-            $table->string('isi_berita');
+            $table->text('isi_berita');
             $table->string('komentar')->nullable();
             $table->integer('status_headline')->default('1');
             $table->enum('status', ['pending', 'posting', 'deleted'])->default('pending');

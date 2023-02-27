@@ -40,6 +40,8 @@ Route::controller(LoginController::class)->group(function () {
 
 Route::group(['middleware'=>['auth']],function(){
     
+    Route::get('/input-berita',[CekBeritaController::class,'add'])->name('add');
+Route::post('/berita-create',[CekBeritaController::class,'create'])->name('create');
     
 
     
@@ -96,9 +98,9 @@ Route::get('/berita{id}',[BeritaController::class,'tampilkan'])->name('tampilkan
 //cek berita
 
 Route::get('/',[CekBeritaController::class,'index2'])->name('index');
-Route::get('/input-berita',[CekBeritaController::class,'add'])->name('add');
-Route::post('/berita-create',[CekBeritaController::class,'create'])->name('create');
+
 Route::get('/coba{id}',[CekBeritaController::class,'coba'])->name('index');
+
 
 
 

@@ -81,12 +81,20 @@ return view('berita/indexberita2', compact('beritas', 'timeAgoArray'));
     }
     
     function coba($id){
+        $kate=berita::all();
         $up=berita::findorfail($id);
+        
 
         if ($up->status == 'posting') {
-            return view('berita/indexberita',compact('up'));
+            return view('berita/indexberita',compact('up','kate'));
         }
        
+       
+    }
+    function coba2(){
+       
+            return view('berita/indexberita',compact('kate'));
+
        
     }
     
