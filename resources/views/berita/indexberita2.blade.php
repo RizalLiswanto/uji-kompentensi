@@ -279,7 +279,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Without menu - Layouts | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <title>Portal Berita</title>
 
     <meta name="description" content="" />
 
@@ -455,10 +455,11 @@
                     </div>
                   </div>
               </div>
+             
             <!--/ Card layout -->
           </div>
 
-      <div class="container-xxl flex-grow-1 container-p-y"></div>
+     
   
 </div>
 

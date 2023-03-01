@@ -83,20 +83,16 @@ return view('berita/indexberita2', compact('beritas', 'timeAgoArray'));
     function coba($id){
         $kate=berita::all();
         $up=berita::findorfail($id);
+        $relatedNews = Berita::where('status', 'posting')->whereNotIn('id', [$id])->get();
         
 
         if ($up->status == 'posting') {
-            return view('berita/indexberita',compact('up','kate'));
+            return view('berita/indexberita',compact('up','kate','relatedNews'));
         }
        
        
     }
-    function coba2(){
-       
-            return view('berita/indexberita',compact('kate'));
-
-       
-    }
+   
     
 
     function add(){
