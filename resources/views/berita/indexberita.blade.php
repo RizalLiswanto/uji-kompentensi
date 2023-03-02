@@ -93,7 +93,7 @@
               <div class="card-body"> 
                  <h3 class="card-title">Komentar</h3>
                 <!-- Form komentar -->
-                <form action="" method="POST">
+                <form action="/create-komen" method="POST">
                   @csrf
                   <div class="form-group">
                     <label for="name">Nama</label>
@@ -102,17 +102,61 @@
                   <div class="form-group">
                     <label for="comment">Komentar</label>
                     <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                    <input type="hidden" name="berita_id" value="{{ $up->id }}">
                   </div>
-                  <button type="submit" class="btn btn-primary">Kirim</button>
+                 
+                  <button type="submit" class="btn btn-primary mt-3">Kirim</button>
                 </form> 
                 <!-- Tampilan daftar komentar -->
-              
-                 <div class="card mt-3">
-                  <div class="card-body">
-                    <h5 class="card-title"></h5>
-                    <p class="card-text"></p>
-                  </div>
+            
+            
+@foreach ($comments as $comment)
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ $comment->name }}</h5>
+            <p class="card-text">{{ $comment->comment }}</p>
+            <p class="card-text"><small class="text-muted">{{ $comment->created_at->format('d M Y H:i') }}</small></p>
+
+            <button class="btn btn-sm btn-outline-secondary reply-btn" data-comment-id="{{ $comment->id }}">Balas</button>
+
+            @if ($comment->replies->count() > 0)
+                <div class="replies ml-3">
+                    @foreach ($comment->replies->sortBy('created_at') as $reply)
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">{{ $reply->name }}</h6>
+                                <p class="card-text">{{ $reply->comment }}</p>
+                                <p class="card-text"><small class="text-muted">{{ $reply->created_at->format('d M Y H:i') }}</small></p>
+                                @if( $reply->parent_id = null)
+                                <button class="btn btn-sm btn-outline-secondary reply-btn" data-comment-id="{{ $comment->id }}">Balas</button>
+                              @endif
+                              </div>
+                        </div>
+                    @endforeach
                 </div>
+            @endif
+
+            <form class="reply-form mt-3" action="/storeReply" method="POST" style="display: none;">
+                @csrf
+                <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+
+                <div class="form-group">
+                    <label for="reply-name">Nama</label>
+                    <input type="text" name="name" class="form-control" id="reply-name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reply-comment">Komentar</label>
+                    <textarea name="comment" class="form-control" id="reply-comment" rows="3" required></textarea>
+                    <input type="hidden" name="berita_id" value="{{ $up->id }}">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Kirim</button>
+            </form>
+        </div>
+    </div>
+@endforeach
+            
              
               </div>
             </div>
@@ -141,6 +185,13 @@
            
       
     </div>
+    <script>
+      $(document).ready(function() {
+          $(".reply-btn").click(function() {
+              $(this).closest(".card-body").find(".reply-form").toggle();
+          });
+      });
+  </script>
     <script src="{{ 'style/assets/vendor/libs/jquery/jquery.js' }}"></script>
     <script src="{{ 'style/assets/vendor/libs/popper/popper.js' }}"></script>
     <script src="{{ 'style/assets/vendor/js/bootstrap.js' }}"></script>

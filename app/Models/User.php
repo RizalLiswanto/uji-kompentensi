@@ -35,6 +35,10 @@ class User extends Authenticatable
     public function Level(){
         return $this->belongsTo(level::class);
     }
+    public function Komen()
+    {
+    return $this->hasMany(komen::class);
+    }
     
 //     public function berita()
 // {

@@ -115,6 +115,12 @@
                 <div data-i18n="Basic">Cek Berita</div>
               </a>
             </li>
+            <li class="menu-item">
+              <a href="/" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-box"></i>
+                <div data-i18n="Basic">Halaman berita</div>
+              </a>
+            </li>
 
             <!-- Layouts -->
             <li class="menu-item">

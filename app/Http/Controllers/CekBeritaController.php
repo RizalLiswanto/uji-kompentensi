@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\berita;
 use App\Models\Image;
+use App\Models\komen;
 use App\Models\tipe_berita;
 use App\Models\users;
 use Carbon\Carbon;
@@ -11,97 +12,85 @@ use Illuminate\Http\Request;
 
 class CekBeritaController extends Controller
 {
-   
+public function index(){
+     $data = berita::with('tipe_berita')->paginate(10);
+     $timeAgoArray = [];
 
+    foreach ($data as $item) {
+        $createdAt = Carbon::parse($item->created_at);
+        $diffInDays = $createdAt->diffInDays();
+        $diffInHours = $createdAt->diffInHours();
+        $diffInMinutes = $createdAt->diffInMinutes();
 
-   
+        if ($diffInMinutes < 60) {
+            $timeAgo = $diffInMinutes.' menit yang lalu';
+        }
+        elseif ($diffInHours < 24) {
+            $timeAgo = $diffInHours.' jam yang lalu';
+        }
+        elseif ($diffInDays < 7) {
+            $timeAgo = $diffInDays.' hari yang lalu';
+        }
+        else {
+            $timeAgo = $createdAt->isoFormat('D MMMM Y');
+        }
 
-
-    //
-    function index(){
-        $data = berita::with('tipe_berita')->paginate(10);
-        $timeAgoArray = [];
-
-foreach ($data as $item) {
-    $createdAt = Carbon::parse($item->created_at);
-    $diffInDays = $createdAt->diffInDays();
-    $diffInHours = $createdAt->diffInHours();
-    $diffInMinutes = $createdAt->diffInMinutes();
-
-    if ($diffInMinutes < 60) {
-        $timeAgo = $diffInMinutes.' menit yang lalu';
+        $timeAgoArray[$item->id] = $timeAgo;
     }
-    elseif ($diffInHours < 24) {
-        $timeAgo = $diffInHours.' jam yang lalu';
-    }
-    elseif ($diffInDays < 7) {
-        $timeAgo = $diffInDays.' hari yang lalu';
-    }
-    else {
-        $timeAgo = $createdAt->isoFormat('D MMMM Y');
-    }
-
-    $timeAgoArray[$item->id] = $timeAgo;
+            return view('cekberita/cek-berita',compact('data','timeAgoArray'));
 }
-        return view('cekberita/cek-berita',compact('data','timeAgoArray'));
-    }
     
-    function index2(){ 
+public function index2(){    
+    $beritas = berita::with('images')->where('status', 'posting')->latest('created_at')->get();
+    $timeAgoArray = [];
 
-       
-$beritas = berita::with('images')->where('status', 'posting')->latest('created_at')->get();
-$timeAgoArray = [];
+  foreach ($beritas as $item) {
+        $createdAt = Carbon::parse($item->created_at);
+        $diffInDays = $createdAt->diffInDays();
+        $diffInHours = $createdAt->diffInHours();
+        $diffInMinutes = $createdAt->diffInMinutes();
 
-foreach ($beritas as $item) {
-    $createdAt = Carbon::parse($item->created_at);
-    $diffInDays = $createdAt->diffInDays();
-    $diffInHours = $createdAt->diffInHours();
-    $diffInMinutes = $createdAt->diffInMinutes();
+        if ($diffInMinutes < 60) {
+            $timeAgo = $diffInMinutes.' menit yang lalu';
+        }
+        elseif ($diffInHours < 24) {
+            $timeAgo = $diffInHours.' jam yang lalu';
+        }
+        elseif ($diffInDays < 7) {
+            $timeAgo = $diffInDays.' hari yang lalu';
+        }
+        else {
+            $timeAgo = $createdAt->isoFormat('D MMMM Y');
+        }
 
-    if ($diffInMinutes < 60) {
-        $timeAgo = $diffInMinutes.' menit yang lalu';
-    }
-    elseif ($diffInHours < 24) {
-        $timeAgo = $diffInHours.' jam yang lalu';
-    }
-    elseif ($diffInDays < 7) {
-        $timeAgo = $diffInDays.' hari yang lalu';
-    }
-    else {
-        $timeAgo = $createdAt->isoFormat('D MMMM Y');
+        $timeAgoArray[$item->id] = $timeAgo;
     }
 
-    $timeAgoArray[$item->id] = $timeAgo;
+    return view('berita/indexberita2', compact('beritas', 'timeAgoArray'));
 }
-
-return view('berita/indexberita2', compact('beritas', 'timeAgoArray'));
-
-       
-
-    }
     
-    function coba($id){
-        $kate=berita::all();
-        $up=berita::findorfail($id);
-        $relatedNews = Berita::where('status', 'posting')->whereNotIn('id', [$id])->get();
-        
+public function coba($id){
+    $kate=berita::all();
+    $up=berita::with('User','Komen')->findorfail($id);
+    $relatedNews = Berita::where('status', 'posting')->whereNotIn('id', [$id])->get();
+    $comments = komen::where('berita_id', $id)
+    ->where('parent_id', null)
+    ->orderBy('created_at', 'desc')
+    ->get();
 
         if ($up->status == 'posting') {
-            return view('berita/indexberita',compact('up','kate','relatedNews'));
-        }
-       
-       
-    }
+            return view('berita/indexberita',compact('up','kate','relatedNews','comments'));
+        }   
+}
    
     
 
-    function add(){
+public function add(){
 
-        $kate=tipe_berita::all();
-       
-         return view('berita/create-berita',compact('kate'));
-        
-    }
+     $kate=tipe_berita::all();
+     return view('berita/create-berita',compact('kate'));   
+
+}
     public function create(Request $request){
 
         
@@ -169,11 +158,7 @@ public function update(Request $request, $id)
         return view('deleted', compact('message'));
     }
 
-
-
-
-
-    
+    //komentar pada cek berita
 public function komen(Request $request, $id)
 {
     $item = Berita::find($id);
@@ -182,6 +167,54 @@ public function komen(Request $request, $id)
     
     return redirect('/cek-berita')->with('success', 'Komentar berhasil di isi');
 }
+
+//komen di index berita
+
+public function createKomen(Request $request,$parentId = null)
+{
+
+    $komen = new Komen;
+    if(auth()->check()){
+        $komen->user_id = auth()->user()->id;
+    } else {
+        $komen->user_id = null;
+    }
+    $komen->comment = $request->comment;
+    $komen->name = $request->name;
+    $komen->berita_id = $request->berita_id;
+    $komen->parent_id = $parentId;
+    $komen->save();
+
+    
+    
+    return back();
+}
+
+public function balaskomen(Request $request)
+{
+    $request->validate([
+        'name' => 'required',
+        'comment' => 'required',
+        'parent_id' => 'required',
+    ]);
+
+    $reply = new komen;
+    if(auth()->check()){
+        $reply->user_id = auth()->user()->id;
+    } else {
+        $reply->user_id = null;
+    }
+    $reply->name = $request->name;
+    $reply->comment = $request->comment;
+    $reply->berita_id = $request->berita_id;
+    $reply->parent_id = $request->parent_id;
+    $reply->save();
+
+    return back()->with('success', 'Reply posted successfully!');
+}
+
+
+
 
 
     

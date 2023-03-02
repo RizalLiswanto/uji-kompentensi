@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('siswa_pkl', function (Blueprint $table) {
+        Schema::create('komen', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('kelas');
-            $table->string('umur');
-            $table->string('sekolah');
+            $table->integer('user_id')->nullable();
+            $table->string('name');
+            $table->text('comment');
+            $table->integer('berita_id');
+            $table->integer('parent_id')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('komen_teble');
     }
 };

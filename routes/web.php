@@ -5,6 +5,7 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\CekBeritaController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\KomenController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -98,8 +99,11 @@ Route::get('/berita{id}',[BeritaController::class,'tampilkan'])->name('tampilkan
 //cek berita
 
 Route::get('/',[CekBeritaController::class,'index2'])->name('index');
-
 Route::get('/coba{id}',[CekBeritaController::class,'coba'])->name('index');
+Route::post('/create-komen',[CekBeritaController::class,'createKomen'])->name('createKomen');
+Route::post('/storeReply',[CekBeritaController::class,'balaskomen'])->name('storeReply');
+
+
 
 
 

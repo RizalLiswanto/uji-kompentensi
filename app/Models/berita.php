@@ -35,4 +35,9 @@ class berita extends Model
     {
         return $this->hasMany(Image::class);
     }
+
+    public function Komen()
+    {
+    return $this->hasMany(komen::class);
+    }
 }
