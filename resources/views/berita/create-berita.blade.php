@@ -119,7 +119,17 @@
                                 <div class="col-sm-10">
                                   <input class="form-control" type="file" id="formFile" name="gambar">
                                 </div>
-                              </div>                
+                              </div>     
+                              @if ($errors->any())
+                              <div class="alert alert-danger alert-dismissible" role="alert">
+                                     <ul>
+                                         @foreach ($errors->all() as $error)
+                                             <li>{{ $error }}</li>
+                                         @endforeach
+                                     </ul>
+                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                 </div>
+                             @endif                              
                               <div class="row justify-content-end">
                                 <div class="col-sm-10">
                                   <button type="submit" class="btn btn-primary">Kirim</button>

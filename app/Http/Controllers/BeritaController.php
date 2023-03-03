@@ -29,10 +29,14 @@ class BeritaController extends Controller
     }     
 
     public function create(Request $request){
-        $user =[
-          'tipe'=>$request->insert,
-          ];
-          tipe_berita::create($user);
+
+      $validasi=$request->validate([
+        'tipe' => 'required',
+    ], [
+        'tipe.required' => 'Tipe harus diisi.',
+    ]);
+      
+          tipe_berita::create($validasi);
 
         return redirect('/tipe-berita')->with(['success', 'Data Berhasil Disimpan!']);
     }    

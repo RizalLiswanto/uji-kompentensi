@@ -8,6 +8,7 @@
    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
  </div>
  @endif
+ 
  <div class="card">
   <div class="table-responsive text-nowrap">
     <table class="table">
@@ -73,7 +74,7 @@
               <div class="row">
                 <div class="col mb-3">
                 <label for="nameSmall" class="form-label">Apakah Anda yakin ?</label>
-                  <form action="/tipe-berita-delete" method="post">
+                  <form action="/-delete" method="post">
                     @csrf
                   <input type="hidden" id="id_delete" name="id_delete" />
                 </div>

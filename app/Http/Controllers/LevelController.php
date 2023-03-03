@@ -22,7 +22,9 @@ class LevelController extends Controller
         $this->validate($request, [
           'level' => 'required',
          
-        ]);
+        ], [
+          'level.required' => 'Level harus diisi.',
+      ]);
 
 
         //create post

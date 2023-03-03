@@ -94,6 +94,21 @@ public function add(){
     public function create(Request $request){
 
         
+
+        $request->validate([
+            'judul' => 'required',
+            'tipeberita' => 'required|integer',
+            'isi' => 'required',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+        ], [
+            'judul.required' => 'Judul berita harus diisi.',
+            'tipeberita.integer' => 'Tipe berita harus dipilih.',
+            'isi.required' => 'Isi berita harus diisi.',
+            'gambar.image' => 'File harus berupa gambar.',
+            'gambar.mimes' => 'File harus berformat jpeg, png, jpg, atau gif.',
+            
+        ]);
+
         $berita = berita::create([
             'judul' => $request->judul,
             'user_id' => auth()->user()->id,
